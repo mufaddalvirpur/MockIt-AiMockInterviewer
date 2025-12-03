@@ -6,18 +6,21 @@ import React, { useEffect } from 'react'
 function Header() {
 
   const path = usePathname();
-  useEffect(()=>{
+  useEffect(() => {
     console.log(path)
-  },[])
+  }, [])
 
   return (
-    <div className='flex p-3 items-center justify-between bg-black shadow-md'>
+    <div className='flex p-3 items-center justify-between bg-gray-50'>
       <img src="/logo.png" width={120} height={100} alt="logo" />
       <ul className='hidden md:flex gap-6'>
         <li>
-          <a href="/dashboard" className={`text-white hover:text-white hover:font-bold transition-all cursor-pointer
-          ${path === '/dashboard' ? 'text-white font-bold' : ''}`}>
-          Dashboard
+          <a href="/dashboard" className={`
+            text-black transition-all cursor-pointer inline-block
+             hover:scale-105 hover:font-medium]
+            ${path === '/dashboard' ? 'font-medium' : ''}
+            `}>
+            Home
           </a>
         </li>
         {/* <li className={` text-white hover:text-white hover:font-bold transition-all cursor-pointer
@@ -33,7 +36,7 @@ function Header() {
           ${path=='/dashboard/about'&&'text-white font-bold'}
           `}>About Us</li> */}
       </ul>
-      <UserButton/>
+      <UserButton />
     </div>
   )
 }

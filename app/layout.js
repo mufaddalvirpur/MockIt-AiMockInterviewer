@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "MockIt"
+  title: "MockIt",
+  icons: "/title.png"
 };
 
 export default function RootLayout({ children }) {

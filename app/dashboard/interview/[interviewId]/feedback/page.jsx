@@ -51,11 +51,11 @@ function feedback() {
   
   return (
     <div className='p-10'>
-      <h2 className='text-3xl font-bold flex justify-center items-center'>Congratulations!</h2>
-      <h2 className='text-2xl my-1 font-semibold flex justify-center items-center'>Here is your Interview feedback</h2>
+      <h2 className='text-white text-3xl font-bold flex justify-center items-center'>Congratulations!</h2>
+      <h2 className='text-white text-2xl my-1 font-semibold flex justify-center items-center'>Here is your Interview feedback</h2>
       <h2 className='text-lg my-2 p-1 bg-gray-300 border border-black flex justify-center items-center'>Your overall Rating is:&nbsp;<strong>{overallRating}</strong></h2>
 
-      <h2 className='text-md my-2 mt-12'>Interview Questions & Your Answers along with Feedback & Correct Answers:</h2>
+      <h2 className='text-white text-md my-2 mt-12'>Interview Questions & Your Answers along with Feedback & Correct Answers:</h2>
     {feedbackList&&feedbackList.map((item,index)=>(
       <Collapsible key={index} className='mt-3'>
       <CollapsibleTrigger className='p-2 bg-gray-50 rounded-xl my-2 text-left flex justify-between gap-5 text-md border'>
