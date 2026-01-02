@@ -11,14 +11,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { chatSession } from '@/utils/GeminiAI'
-import { LoaderCircle, X } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { db } from '@/utils/db'
 import { MockIt } from '@/utils/schema'
 import { v4 as uuidv4 } from 'uuid'
 import { useUser } from '@clerk/nextjs'
 import moment from 'moment'
 import { useRouter } from 'next/navigation'
-
+import { toast } from 'sonner'
 
 function AddNewIt() {
   const [openDailog, setOpenDailog] = useState(false)
@@ -32,39 +32,98 @@ function AddNewIt() {
   const onSubmit = async (e) => {
     setLoading(true)
     e.preventDefault()
-    console.log(jobPosition, jobDescription)
-    const InputPrompt = " Job Role/Position: " + jobPosition + ", Job Description/Skills: " + jobDescription + ", Depend on Job Role/Position, Job Description/Skills, generate " + process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT + " interview questions along with answers in JSON Format, give questions and answers based on field in JSON"
-    const result = await chatSession.sendMessage(InputPrompt);
+    
+    try {
+      console.log(jobPosition, jobDescription)
+      const InputPrompt = "Job Role/Position: " + jobPosition + ", Job Description/Skills: " + jobDescription + ", Based on the job role and description, generate " + process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT + " interview questions along with answers in JSON Format. The JSON should have an array of objects with 'question' and 'answer' fields."
+      
+      const result = await chatSession.sendMessage(InputPrompt);
+      const rawResponse = await result.response.text()
+      
+      // Clean the response to extract JSON
+      let MockJsonResp = rawResponse.replace(/```json/g, '').replace(/```/g, '').trim()
+      
+      console.log("API Response:", MockJsonResp)
+      
+      // Try to parse to verify it's valid JSON
+      const parsedJson = JSON.parse(MockJsonResp)
+      console.log("Parsed JSON:", parsedJson)
+      
+      setJsonResponse(MockJsonResp)
 
-    const rawResponse = await result.response.text()
-    const MockJsonResp = (result.response.text()).replace('```json', '').replace('```', '')
-    console.log(JSON.parse(MockJsonResp))
-    setJsonResponse(MockJsonResp)
-
-    if (MockJsonResp) {
-      const resp = await db.insert(MockIt)
-        .values({
-          mockId: uuidv4(),
-          jsonMockResp: MockJsonResp,
-          jobPosition: jobPosition,
-          jobDesc: jobDescription,
-          createdBy: user?.primaryEmailAddress?.emailAddress,
-          createdAt: moment().format('DD-MM-yyyy')
-        }).returning({ mockId: MockIt.mockId })
-      console.log("Inserted ID:", resp)
-      if (resp) {
-        setOpenDailog(false)
-        router.push('/dashboard/interview/' + resp[0]?.mockId)
+      if (MockJsonResp) {
+        const resp = await db.insert(MockIt)
+          .values({
+            mockId: uuidv4(),
+            jsonMockResp: MockJsonResp,
+            jobPosition: jobPosition,
+            jobDesc: jobDescription,
+            createdBy: user?.primaryEmailAddress?.emailAddress,
+            createdAt: moment().format('DD-MM-yyyy')
+          }).returning({ mockId: MockIt.mockId })
+        
+        console.log("Inserted ID:", resp)
+        
+        if (resp) {
+          toast.success('Interview created successfully!', {
+            style: {
+              background: 'white',
+              color: 'black',
+              border: '1px solid #e5e7eb'
+            },
+            duration: 3000
+          })
+          setOpenDailog(false)
+          router.push('/dashboard/interview/' + resp[0]?.mockId)
+        }
+      } else {
+        toast.error('Failed to generate questions', {
+          style: {
+            background: 'white',
+            color: 'black',
+            border: '1px solid #e5e7eb'
+          },
+          duration: 3000
+        })
       }
+    } catch (error) {
+      console.error("Full Error:", error)
+      
+      if (error.message?.includes('429') || error.message?.includes('quota')) {
+        toast.error('API quota exceeded. Please try again later.', {
+          style: {
+            background: 'white',
+            color: 'black',
+            border: '1px solid #e5e7eb'
+          },
+          duration: 3000
+        })
+      } else if (error.message?.includes('404')) {
+        toast.error('Model not found. Please check your API configuration.', {
+          style: {
+            background: 'white',
+            color: 'black',
+            border: '1px solid #e5e7eb'
+          },
+          duration: 3000
+        })
+      } else {
+        toast.error('Error: ' + (error.message || 'Something went wrong'), {
+          style: {
+            background: 'white',
+            color: 'black',
+            border: '1px solid #e5e7eb'
+          },
+          duration: 3000
+        })
+      }
+    } finally {
+      setLoading(false)
     }
-    else {
-      console.log("ERROR")
-    }
-    setLoading(false)
   }
+
   return (
     <div>
-      {/* UPDATED SECTION: Milky Glass Card */}
       <div 
         className='p-14 rounded-3xl cursor-pointer transition-all duration-300
                    bg-white/30 border border-white/40 backdrop-blur-lg shadow-lg
@@ -77,7 +136,6 @@ function AddNewIt() {
       </div>
 
       <Dialog open={openDailog}>
-
         <DialogContent className='bg-white max-w-2xl'>
           <DialogHeader>
             <DialogTitle className="text-2xl">Tell me about Yourself & Job</DialogTitle>
@@ -111,7 +169,6 @@ function AddNewIt() {
           </DialogHeader>
         </DialogContent>
       </Dialog>
-
     </div>
   )
 }
