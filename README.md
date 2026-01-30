@@ -4,7 +4,7 @@
 
 MockIt is an advanced AI-powered mock interview platform designed to help job seekers practice, refine, and master their interview skills. Built with **Next.js**, it leverages **Google's Gemini AI** to generate personalized interview questions and provide real-time feedback.
 
-**Live link:** https://mockit-tau.vercel.app/
+**Live link:** https://ai-mockit.vercel.app/
 
 ![MockIt Banner](public/logo.png)
 
