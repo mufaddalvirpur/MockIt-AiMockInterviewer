@@ -11,31 +11,43 @@ function Header() {
   }, [])
 
   return (
-    <div className='flex p-3 items-center justify-between bg-gray-50'>
+    <div className='flex px-8 py-3 items-center justify-between bg-black/40 backdrop-blur-xl border border-white/10 sticky top-5 z-50 mx-5 rounded-full'>
+      
       <img src="/logo.png" width={120} height={100} alt="logo" />
-      <ul className='hidden md:flex gap-6'>
+      
+      {/* Increased gap from gap-10 to gap-14 for more spacing */}
+      <ul className='hidden md:flex gap-14'>
         <li>
           <a href="/dashboard" className={`
-            text-black transition-all cursor-pointer inline-block
-             hover:scale-105 hover:font-medium]
+            text-white transition-all cursor-pointer inline-block
+             hover:scale-105 hover:font-medium
             ${path === '/dashboard' ? 'font-medium' : ''}
             `}>
             Home
           </a>
         </li>
-        {/* <li className={` text-white hover:text-white hover:font-bold transition-all cursor-pointer
-          ${path=='/dashboard'&&'text-white font-bold'}
-          `}>Dashboard</li> */}
-        {/* <li className={`text-white hover:text-white hover:font-bold transition-all cursor-pointer
-          ${path=='/dashboard/support'&&'text-white font-bold'}
-          `}>Support</li> */}
-        {/* <li className={`text-white hover:text-white hover:font-bold transition-all cursor-pointer
-          ${path=='/dashboard/how'&&'text-white font-bold'}
-          `}>How It Works?</li> */}
-        {/* <li className={`text-white hover:text-white hover:font-bold transition-all cursor-pointer
-          ${path=='/dashboard/about'&&'text-white font-bold'}
-          `}>About Us</li> */}
+        
+        <li>
+          <a href="/dashboard/features" className={`
+            text-white transition-all cursor-pointer inline-block
+             hover:scale-105 hover:font-medium
+            ${path === '/dashboard/features' ? 'font-medium' : ''}
+            `}>
+            Features
+          </a>
+        </li>
+        
+        <li>
+          <a href="/dashboard/about" className={`
+            text-white transition-all cursor-pointer inline-block
+             hover:scale-105 hover:font-medium
+            ${path === '/dashboard/about' ? 'font-medium' : ''}
+            `}>
+            About us
+          </a>
+        </li>
       </ul>
+      
       <UserButton />
     </div>
   )

@@ -6,6 +6,8 @@ MockIt is an advanced AI-powered mock interview platform designed to help job se
 
 **Live link:** https://ai-mockit.vercel.app/
 
+![MockIt Banner](public/logo.png)
+
 ## 🚀 Features
 
 -   **🔐 Secure Authentication:** Seamless login and signup via **Clerk**.

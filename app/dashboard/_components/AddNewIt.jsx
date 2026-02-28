@@ -130,7 +130,7 @@ function AddNewIt() {
                    hover:bg-white/40 hover:border-white/60 hover:shadow-2xl hover:-translate-y-1 group'
         onClick={() => setOpenDailog(true)}
       >
-        <h2 className='text-xl text-center font-bold text-white group-hover:scale-105 transition-all'>
+        <h2 className='text-xl text-center font-semibold text-white group-hover:scale-105 transition-all'>
             + Add New
         </h2>
       </div>

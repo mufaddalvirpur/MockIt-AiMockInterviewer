@@ -129,10 +129,11 @@ function RecordAns({mockInterviewQues, activeQuesIndex, interviewData}) {
           }}
         />
       </div>
+      {/* MATCHING RED BUTTON HOVER ADDED HERE */}
       <Button 
         disabled={loading} 
         variant 
-        className='my-3 rounded-xl bg-red-50 text-red-600 border border-red-600'
+        className='my-3 rounded-xl bg-red-50 text-red-600 border border-red-600 hover:bg-red-100 transition-colors'
         onClick={StartStopRec}
       >
         {isRecording ?
